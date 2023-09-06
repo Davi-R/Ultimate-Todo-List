@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Container, Row, Col } from 'react-bootstrap';
 
-const LateralBar = ({ switchToList }) => {
+const LateralBar = ({ switchToList, currentTodoId }) => {
   const [showSidebar, setShowSidebar] = useState(false);
   const [localStorageKeys, setLocalStorageKeys] = useState([]);
 
@@ -14,9 +14,14 @@ const LateralBar = ({ switchToList }) => {
   const toggleSidebar = () => {
     setShowSidebar(!showSidebar);
 
-    // Atualize os botões quando a barra lateral for aberta
+    // Ordenar as chaves em ordem alfabética quando a barra lateral for aberta
     if (!showSidebar) {
       const keys = Object.keys(localStorage);
+      keys.sort((a, b) => {
+        const titleA = JSON.parse(localStorage.getItem(a)).listTitle.toLowerCase();
+        const titleB = JSON.parse(localStorage.getItem(b)).listTitle.toLowerCase();
+        return titleA.localeCompare(titleB);
+      });
       setLocalStorageKeys(keys);
     }
   };
@@ -30,6 +35,9 @@ const LateralBar = ({ switchToList }) => {
 
     // Chame a função switchToList com o ID mais alto + 1
     switchToList(maxId + 1);
+
+    // Feche a barra lateral quando o botão "Criar Nova Todo" for pressionado
+    setShowSidebar(false);
   };
 
   const renderTodoButtons = () => {
@@ -41,6 +49,7 @@ const LateralBar = ({ switchToList }) => {
         <Button
           key={key}
           onClick={() => switchToList(parseInt(id))}
+          disabled={parseInt(id) === currentTodoId}
         >
           {listTitle}
         </Button>
