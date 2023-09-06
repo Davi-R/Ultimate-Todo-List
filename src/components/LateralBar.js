@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Container, Row, Col } from 'react-bootstrap';
 
-const LateralBar = ({ switchToList, currentTodoId }) => {
+const LateralBar = ({ switchToList, currentTodoId, deleteCurrentList}) => {
   const [showSidebar, setShowSidebar] = useState(false);
   const [localStorageKeys, setLocalStorageKeys] = useState([]);
 
   useEffect(() => {
-    // Obtém as chaves do Local Storage
+    
     const keys = Object.keys(localStorage);
     setLocalStorageKeys(keys);
   }, []);
@@ -14,7 +14,7 @@ const LateralBar = ({ switchToList, currentTodoId }) => {
   const toggleSidebar = () => {
     setShowSidebar(!showSidebar);
 
-    // Ordenar as chaves em ordem alfabética quando a barra lateral for aberta
+    
     if (!showSidebar) {
       const keys = Object.keys(localStorage);
       keys.sort((a, b) => {
@@ -27,16 +27,24 @@ const LateralBar = ({ switchToList, currentTodoId }) => {
   };
 
   const createNewTodo = () => {
-    // Encontre o ID mais alto
+    
     const maxId = localStorageKeys.reduce((max, key) => {
       const id = parseInt(key.replace('todo', ''));
       return id > max ? id : max;
     }, 0);
 
-    // Chame a função switchToList com o ID mais alto + 1
+    
     switchToList(maxId + 1);
 
-    // Feche a barra lateral quando o botão "Criar Nova Todo" for pressionado
+    
+    setShowSidebar(false);
+  };
+
+  const handleTodoButtonClick = (id) => {
+    
+    switchToList(id);
+
+    
     setShowSidebar(false);
   };
 
@@ -44,11 +52,11 @@ const LateralBar = ({ switchToList, currentTodoId }) => {
     return localStorageKeys.map((key) => {
       const listTitle = JSON.parse(localStorage.getItem(key)).listTitle;
       const id = key.replace('todo', '');
-
+      
       return (
         <Button
           key={key}
-          onClick={() => switchToList(parseInt(id))}
+          onClick={() => handleTodoButtonClick(parseInt(id))}
           disabled={parseInt(id) === currentTodoId}
         >
           {listTitle}
@@ -57,6 +65,12 @@ const LateralBar = ({ switchToList, currentTodoId }) => {
     });
   };
 
+  const deletetodo = () => {
+  const confirmation = window.confirm('Delete current Todo?')
+  if (confirmation) {
+    setShowSidebar(false);
+    deleteCurrentList()
+  }}
   return (
     <div>
       <Button variant="primary" onClick={toggleSidebar}>
@@ -68,6 +82,9 @@ const LateralBar = ({ switchToList, currentTodoId }) => {
           <Row>
             <Col>
               <div className="sidebar-content">
+              <Button variant="danger" onClick={deletetodo}>
+            Deletar Lista
+          </Button>
                 <Button onClick={createNewTodo}>Criar Nova Todo</Button>
                 {renderTodoButtons()}
               </div>

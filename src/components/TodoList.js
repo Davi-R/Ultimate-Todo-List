@@ -8,9 +8,11 @@ function TodoList() {
   const [editIndex, setEditIndex] = useState(null);
   const [editTask, setEditTask] = useState('');
   const [listTitle, setListTitle] = useState('Minha Lista de Tarefas');
-  const [currentListId, setCurrentListId] = useState(1); // ID da lista atual
+  const [currentListId, setCurrentListId] = useState(1); 
+  const [oldtodo, setOldTodo] = useState(null);
 
-  // Função para adicionar uma tarefa
+
+  
   const addTask = () => {
     if (task) {
       const newTask = { text: task, completed: false };
@@ -21,7 +23,7 @@ function TodoList() {
     }
   };
 
-  // Função para remover uma tarefa
+  
   const removeTask = (index) => {
     const updatedTasks = [...tasks];
     updatedTasks.splice(index, 1);
@@ -29,7 +31,7 @@ function TodoList() {
     saveDataToLocalStorage({ listTitle, tasks: updatedTasks }, currentListId);
   };
 
-  // Função para alternar a conclusão de uma tarefa
+  
   const toggleCompletion = (index) => {
     const updatedTasks = [...tasks];
     updatedTasks[index].completed = !updatedTasks[index].completed;
@@ -37,13 +39,13 @@ function TodoList() {
     saveDataToLocalStorage({ listTitle, tasks: updatedTasks }, currentListId);
   };
 
-  // Função para iniciar a edição de uma tarefa
+  
   const startEditing = (index) => {
     setEditIndex(index);
     setEditTask(tasks[index].text);
   };
 
-  // Função para salvar a edição de uma tarefa
+  
   const saveEdit = (index) => {
     const updatedTasks = [...tasks];
     updatedTasks[index].text = editTask;
@@ -53,24 +55,30 @@ function TodoList() {
     saveDataToLocalStorage({ listTitle, tasks: updatedTasks }, currentListId);
   };
 
-  // Função para cancelar a edição de uma tarefa
+  
   const cancelEdit = () => {
     setEditIndex(null);
     setEditTask('');
   };
 
-  // Função para lidar com a submissão do formulário
+  
+  const deleteCurrentList = () => {
+    localStorage.removeItem(`todo${currentListId}`);
+    switchToList('delete');
+  };
+
+  
   const handleSubmit = (e) => {
     e.preventDefault();
     addTask();
   };
 
-  // Função para salvar os dados (título e tarefas) no Local Storage
+  
   const saveDataToLocalStorage = (data, id) => {
     localStorage.setItem(`todo${id}`, JSON.stringify(data));
   };
 
-  // Função para carregar os dados (título e tarefas) do Local Storage quando a aplicação iniciar
+  
   const loadDataFromLocalStorage = (id) => {
     const storedData = localStorage.getItem(`todo${id}`);
     if (storedData) {
@@ -84,13 +92,13 @@ function TodoList() {
     loadDataFromLocalStorage(currentListId);
   }, [currentListId]);
 
-  // Função para lidar com a edição direta do título da lista
+  
   const handleListTitleDoubleClick = () => {
     setEditIndex(-1);
     setEditTask(listTitle);
   };
 
-  // Função para salvar a edição do título da lista
+  
   const saveListTitleEdit = () => {
     setListTitle(editTask);
     saveDataToLocalStorage({ listTitle: editTask, tasks }, currentListId);
@@ -98,23 +106,31 @@ function TodoList() {
     setEditTask('');
   };
 
-  // Função para cancelar a edição do título da lista
+  
   const cancelListTitleEdit = () => {
     setEditIndex(null);
     setEditTask('');
   };
 
-  // Função para trocar para outra lista de tarefas com base no ID fornecido
+  
+
   const switchToList = (id) => {
-    setCurrentListId(id);
-    setTasks([]); // Limpa as tarefas quando alternando para uma nova lista
-    setListTitle('Minha Lista de Tarefas'); // Define o título padrão para uma nova lista
-    setEditIndex(null); // Reseta o índice de edição
+    if (id === 'delete'){
+      setTasks([]); 
+      setListTitle('Minha Lista de Tarefas'); 
+      setEditIndex(null); 
+    } else if (id !== oldtodo) {
+      setCurrentListId(id);
+      setTasks([]); 
+      setListTitle('Minha Lista de Tarefas'); 
+      setEditIndex(null); 
+      setOldTodo(id); 
+    }
   };
 
   return (
     <Container>
-      <LateralBar switchToList={switchToList} />
+      <LateralBar switchToList={switchToList} deleteCurrentList={deleteCurrentList} />
       <Row>
         <Col>
           <h1 className={editIndex === -1 ? 'editing' : ''}>
