@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Form, Button, ListGroup } from 'react-bootstrap';
+import LateralBar from './LateralBar';
 
 function TodoList() {
   const [task, setTask] = useState('');
@@ -7,6 +8,7 @@ function TodoList() {
   const [editIndex, setEditIndex] = useState(null);
   const [editTask, setEditTask] = useState('');
   const [listTitle, setListTitle] = useState('Minha Lista de Tarefas');
+  const [currentListId, setCurrentListId] = useState(1); // ID da lista atual
 
   // Função para adicionar uma tarefa
   const addTask = () => {
@@ -15,7 +17,7 @@ function TodoList() {
       const updatedTasks = [...tasks, newTask];
       setTasks(updatedTasks);
       setTask('');
-      saveDataToLocalStorage({ listTitle, tasks: updatedTasks });
+      saveDataToLocalStorage({ listTitle, tasks: updatedTasks }, currentListId);
     }
   };
 
@@ -24,7 +26,7 @@ function TodoList() {
     const updatedTasks = [...tasks];
     updatedTasks.splice(index, 1);
     setTasks(updatedTasks);
-    saveDataToLocalStorage({ listTitle, tasks: updatedTasks });
+    saveDataToLocalStorage({ listTitle, tasks: updatedTasks }, currentListId);
   };
 
   // Função para alternar a conclusão de uma tarefa
@@ -32,7 +34,7 @@ function TodoList() {
     const updatedTasks = [...tasks];
     updatedTasks[index].completed = !updatedTasks[index].completed;
     setTasks(updatedTasks);
-    saveDataToLocalStorage({ listTitle, tasks: updatedTasks });
+    saveDataToLocalStorage({ listTitle, tasks: updatedTasks }, currentListId);
   };
 
   // Função para iniciar a edição de uma tarefa
@@ -48,7 +50,7 @@ function TodoList() {
     setTasks(updatedTasks);
     setEditIndex(null);
     setEditTask('');
-    saveDataToLocalStorage({ listTitle, tasks: updatedTasks });
+    saveDataToLocalStorage({ listTitle, tasks: updatedTasks }, currentListId);
   };
 
   // Função para cancelar a edição de uma tarefa
@@ -64,13 +66,13 @@ function TodoList() {
   };
 
   // Função para salvar os dados (título e tarefas) no Local Storage
-  const saveDataToLocalStorage = (data) => {
-    localStorage.setItem('todoData', JSON.stringify(data));
+  const saveDataToLocalStorage = (data, id) => {
+    localStorage.setItem(`todo${id}`, JSON.stringify(data));
   };
 
   // Função para carregar os dados (título e tarefas) do Local Storage quando a aplicação iniciar
-  const loadDataFromLocalStorage = () => {
-    const storedData = localStorage.getItem('todoData');
+  const loadDataFromLocalStorage = (id) => {
+    const storedData = localStorage.getItem(`todo${id}`);
     if (storedData) {
       const parsedData = JSON.parse(storedData);
       setListTitle(parsedData.listTitle);
@@ -79,8 +81,8 @@ function TodoList() {
   };
 
   useEffect(() => {
-    loadDataFromLocalStorage();
-  }, []);
+    loadDataFromLocalStorage(currentListId);
+  }, [currentListId]);
 
   // Função para lidar com a edição direta do título da lista
   const handleListTitleDoubleClick = () => {
@@ -91,7 +93,7 @@ function TodoList() {
   // Função para salvar a edição do título da lista
   const saveListTitleEdit = () => {
     setListTitle(editTask);
-    saveDataToLocalStorage({ listTitle: editTask, tasks });
+    saveDataToLocalStorage({ listTitle: editTask, tasks }, currentListId);
     setEditIndex(null);
     setEditTask('');
   };
@@ -102,8 +104,17 @@ function TodoList() {
     setEditTask('');
   };
 
+  // Função para trocar para outra lista de tarefas com base no ID fornecido
+  const switchToList = (id) => {
+    setCurrentListId(id);
+    setTasks([]); // Limpa as tarefas quando alternando para uma nova lista
+    setListTitle('Minha Lista de Tarefas'); // Define o título padrão para uma nova lista
+    setEditIndex(null); // Reseta o índice de edição
+  };
+
   return (
     <Container>
+      <LateralBar switchToList={switchToList} />
       <Row>
         <Col>
           <h1 className={editIndex === -1 ? 'editing' : ''}>
@@ -151,7 +162,6 @@ function TodoList() {
                     addTask();
                   }
                 }}
-                autoComplete="off"
               />
             </Form.Group>
             <Button
@@ -229,4 +239,4 @@ function TodoList() {
   );
 }
 
-export default TodoList
+export default TodoList;
