@@ -15,8 +15,57 @@ button {
   font-size: large;
   border-color: transparent;
   vertical-align: middle;
-  border-radius: 5px;
   color: #ececf1;
+}
+
+.top-bar{
+  background-color: #343541;
+  margin-top: -25px;
+  padding-top: 50px;
+  padding-bottom: 20px;
+}
+.custom-form {
+  display:flex;
+  justify-content: center;
+}
+
+.custom-form input[type="text"] {
+  flex: 1;
+  height: 26px;
+  width: 350px;
+}
+
+input {
+  background-color: #40414F;
+  border-color: transparent;
+  border-top-left-radius: 15px;
+  border-bottom-left-radius: 15px;
+  padding-left: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  color: #ececf1;
+}
+
+input:focus {
+  outline: none;
+}
+
+.title-input {
+  font-size: 32px;
+}
+
+.content-div {
+  border: 2px solid #000;
+  width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.btn-add-task {
+  min-width: 50px; 
+  background-color: #19C37D;
+  border-top-right-radius: 15px;
+  border-bottom-right-radius: 15px;
 }
 
 .btn-todos {
@@ -24,6 +73,7 @@ button {
   padding-top: 5%;
   background-color: transparent;
   width: 100%;
+  border-radius: 7px;
 }
 
 .btn-todos:hover {
@@ -33,6 +83,7 @@ button {
 
 .btn-delete-todo, .btn-remove-task {
   background-color: #F22C3D;
+  border-radius: 7px;
 }
 
 .btn-delete-todo:hover, .btn-remove-task:hover {
@@ -40,8 +91,9 @@ button {
   color: #fff;
 }
 
-.btn-create-todo,.btn-add-task {
+.btn-create-todo{
   background-color: #19C37D;
+  border-radius: 7px;
 }
 
 .btn-create-todo:hover,.btn-add-task:hover {
@@ -53,6 +105,17 @@ button {
   background-color: transparent;
 }
 
+.btn-bar-div {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
+.btn-bar-div-close {
+  position: absolute;
+  top: 10px;
+  right: 0px;
+}
 .sidebar {
   position: fixed;
   top: 0;

@@ -69,15 +69,20 @@ const LateralBar = ({ switchToList, currentTodoId, deleteCurrentList }) => {
 
   return (
     <div>
-      <Button onClick={toggleSidebar}
-      class='btn-bar'>
-        Abrir Barra Lateral
-      </Button>
+      <div className='btn-bar-div'>
+        <Button onClick={toggleSidebar} className='btn-bar'>
+          <i class="bi bi-arrow-bar-right"></i>
+        </Button>
+      </div>
 
       {showSidebar && (
         <Container fluid className="sidebar">
           <Row>
             <Col>
+            <div className='btn-bar-div-close'>
+              <Button onClick={toggleSidebar} className='btn-bar'>
+                <i class="bi bi-arrow-bar-left"></i>
+              </Button></div>
               <div>
                 <Button className="btn-delete-todo" onClick={deleteTodo}>
                   Deletar Lista
