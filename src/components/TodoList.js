@@ -147,6 +147,7 @@ function TodoList() {
                   }}
                 />
                 <Button
+                  className='btn-title-save'
                   variant="success"
                   size="sm"
                   onClick={saveListTitleEdit}
@@ -155,6 +156,7 @@ function TodoList() {
                   Salvar
                 </Button>
                 <Button
+                  className='btn-title-cancel'
                   variant="secondary"
                   size="sm"
                   onClick={cancelListTitleEdit}
@@ -181,6 +183,7 @@ function TodoList() {
               />
             </Form.Group>
             <Button
+              className='btn-add-task'
               variant="primary"
               onClick={addTask}
               disabled={!task.trim()}
@@ -208,6 +211,7 @@ function TodoList() {
                       }}
                     />
                     <Button
+                      className='btn-task-save'
                       variant="success"
                       size="sm"
                       onClick={() => saveEdit(index)}
@@ -216,6 +220,7 @@ function TodoList() {
                       Salvar
                     </Button>
                     <Button
+                      className='btn-task-cancel'
                       variant="secondary"
                       size="sm"
                       onClick={cancelEdit}
@@ -231,7 +236,7 @@ function TodoList() {
                     <Button
                       variant="success"
                       size="sm"
-                      className="float-right"
+                      className="btn-check"
                       onClick={() => toggleCompletion(index)}
                     >
                       {taskItem.completed ? 'Desfazer' : 'Concluir'}
@@ -239,7 +244,7 @@ function TodoList() {
                     <Button
                       variant="danger"
                       size="sm"
-                      className="float-right mr-2"
+                      className="btn-remove-task"
                       onClick={() => removeTask(index)}
                     >
                       Remover

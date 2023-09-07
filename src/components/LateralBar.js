@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Container, Row, Col } from 'react-bootstrap';
 
-const LateralBar = ({ switchToList, currentTodoId, deleteCurrentList}) => {
+const LateralBar = ({ switchToList, currentTodoId, deleteCurrentList }) => {
   const [showSidebar, setShowSidebar] = useState(false);
   const [localStorageKeys, setLocalStorageKeys] = useState([]);
 
   useEffect(() => {
-    
     const keys = Object.keys(localStorage);
     setLocalStorageKeys(keys);
   }, []);
@@ -14,7 +13,6 @@ const LateralBar = ({ switchToList, currentTodoId, deleteCurrentList}) => {
   const toggleSidebar = () => {
     setShowSidebar(!showSidebar);
 
-    
     if (!showSidebar) {
       const keys = Object.keys(localStorage);
       keys.sort((a, b) => {
@@ -27,24 +25,19 @@ const LateralBar = ({ switchToList, currentTodoId, deleteCurrentList}) => {
   };
 
   const createNewTodo = () => {
-    
     const maxId = localStorageKeys.reduce((max, key) => {
       const id = parseInt(key.replace('todo', ''));
       return id > max ? id : max;
     }, 0);
 
-    
     switchToList(maxId + 1);
 
-    
     setShowSidebar(false);
   };
 
   const handleTodoButtonClick = (id) => {
-    
     switchToList(id);
 
-    
     setShowSidebar(false);
   };
 
@@ -52,10 +45,11 @@ const LateralBar = ({ switchToList, currentTodoId, deleteCurrentList}) => {
     return localStorageKeys.map((key) => {
       const listTitle = JSON.parse(localStorage.getItem(key)).listTitle;
       const id = key.replace('todo', '');
-      
+
       return (
         <Button
           key={key}
+          className="btn-todos"
           onClick={() => handleTodoButtonClick(parseInt(id))}
           disabled={parseInt(id) === currentTodoId}
         >
@@ -65,15 +59,18 @@ const LateralBar = ({ switchToList, currentTodoId, deleteCurrentList}) => {
     });
   };
 
-  const deletetodo = () => {
-  const confirmation = window.confirm('Delete current Todo?')
-  if (confirmation) {
-    setShowSidebar(false);
-    deleteCurrentList()
-  }}
+  const deleteTodo = () => {
+    const confirmation = window.confirm('Delete current Todo?');
+    if (confirmation) {
+      setShowSidebar(false);
+      deleteCurrentList();
+    }
+  };
+
   return (
     <div>
-      <Button variant="primary" onClick={toggleSidebar}>
+      <Button onClick={toggleSidebar}
+      class='btn-bar'>
         Abrir Barra Lateral
       </Button>
 
@@ -81,38 +78,19 @@ const LateralBar = ({ switchToList, currentTodoId, deleteCurrentList}) => {
         <Container fluid className="sidebar">
           <Row>
             <Col>
-              <div className="sidebar-content">
-              <Button variant="danger" onClick={deletetodo}>
-            Deletar Lista
-          </Button>
-                <Button onClick={createNewTodo}>Criar Nova Todo</Button>
+              <div>
+                <Button className="btn-delete-todo" onClick={deleteTodo}>
+                  Deletar Lista
+                </Button>
+                <Button className="btn-create-todo" onClick={createNewTodo}>
+                  Criar Nova Todo
+                </Button>
                 {renderTodoButtons()}
               </div>
             </Col>
           </Row>
         </Container>
       )}
-
-      <style>
-        {`
-          .sidebar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 250px;
-            height: 100%;
-            background-color: #333;
-            padding: 20px;
-            z-index: 1000;
-            overflow-y: auto;
-            transition: transform 0.3s ease-in-out;
-          }
-
-          .sidebar-content {
-            color: white;
-          }
-        `}
-      </style>
     </div>
   );
 };

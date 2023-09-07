@@ -6,33 +6,81 @@
   height: 40vmin;
   pointer-events: none;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+body {
+  background-color: #444654;
+  color: #ececf1;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+button {
+  font-size: large;
+  border-color: transparent;
+  vertical-align: middle;
+  border-radius: 5px;
+  color: #ececf1;
 }
 
-.App-link {
-  color: #61dafb;
+.btn-todos {
+  text-align: left;
+  padding-top: 5%;
+  background-color: transparent;
+  width: 100%;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.btn-todos:hover {
+  background-color: #343641; 
+  color: #fff;
+}
+
+.btn-delete-todo, .btn-remove-task {
+  background-color: #F22C3D;
+}
+
+.btn-delete-todo:hover, .btn-remove-task:hover {
+  background-color: #B91C1C;
+  color: #fff;
+}
+
+.btn-create-todo,.btn-add-task {
+  background-color: #19C37D;
+}
+
+.btn-create-todo:hover,.btn-add-task:hover {
+  background-color: #0e8668;
+  color: #fff;
+}
+
+.btn-bar {
+  background-color: transparent;
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 250px;
+  height: 100%;
+  background-color: #202123;
+  padding: 20px;
+  z-index: 1000;
+  overflow-y: auto;
+}
+
+.btn-task-save {
+  background-color: transparent;
+}
+
+.btn-task-cancel {
+  background-color: transparent;
+}
+
+.btn-title-save {
+  background-color: transparent;
+}
+
+.btn-title-cancel {
+  background-color: transparent;
+}
+
+.btn-check {
+  background-color: transparent;
 }
